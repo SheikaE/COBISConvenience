@@ -32,49 +32,59 @@ public class Main {
         items.add("Dell Chargers");
         itemsPrice.add(50.00);
 
-        // prompt user for name
-
-
-
-        // create new array list to store customer inputs & initializers
+        // new array list to populate customer data
         ArrayList<String> selectItems = new ArrayList<String>();
-        String selection  = "";
-        String multipleSelection = "";
-        double grandtotal = 0.00;
-        double total;
+        ArrayList<Integer> itemQuantity = new ArrayList<Integer>();
 
-        System.out.print("Welcome! Please enter your name: ");
-        System.out.print("Enter 'Done' to continue.");
-        Scanner input = new Scanner(System.in);
-        String name = input.nextLine();
+        // initializers for customer inputs
+        String selection;
+        Scanner itemName = new Scanner(System.in);
+        String multipleSelections = "";
 
-        while(!(name.equals("Done"))) {
-            multipleSelection += " " + selection;
-            total = 0.00;
 
-            System.out.println("What would you like to buy " + name + "?");
-            System.out.println("Add Items or Enter Exit to Continue.");
-            selection = input.nextLine();
 
-            while (!(selection.equals("Exit"))) { //loop to enter each ordered item
+        // initializers for totals
+        double receipt;
+        double dailyTotal = 0;
+        System.out.println("Enter Customer Name: ");
+
+        // loop for customer name
+        while (!(selection = itemName.nextLine()).equals("Next")) {
+            multipleSelections += "\n" + selection;
+            receipt = 0;
+            System.out.println("Enter item name: ");
+            System.out.println("Enter 'Complete', if finished. ");
+
+            //loop to customer items/purchases
+            while (!(selection = itemName.nextLine()).equals("Complete")) {
                 for (String i : items) {
                     if (i.contains(selection)) {
-                        total += itemsPrice.get(items.indexOf(i));
-                        multipleSelection += " " + selection;
+                        receipt += itemsPrice.get(items.indexOf(i));
+                        multipleSelections += "\n" + selection;
+                        if (!selectItems.contains(selection)) {
+                            selectItems.add(selection);
+                            itemQuantity.add(1);
+                        } else {
+                            int index = selectItems.indexOf(selection);
+                            itemQuantity.set(index, itemQuantity.get(index) + 1);
+                        }
+                        break;
                     }
                 }
-                System.out.print(total);
             }
+            multipleSelections += "\n" + receipt + "\n";
+            Math.round((receipt*100)/100);
+            dailyTotal += receipt;
+            Math.round((dailyTotal *100)/100);
+            System.out.println("Enter next customer name:");
+            System.out.println("Enter 'Next', if finished.");
         }
-
-
-
-        // total
-
-
-
-
-
-
+        // total for receipt and inventory sold
+        System.out.println("Receipt: \n" + multipleSelections);
+        System.out.println("Inventory Sold: ");
+        for (String i:selectItems){
+            System.out.println(i + " ("+ itemQuantity.get(selectItems.indexOf(i)) +")");
+        }
+        System.out.println("Daily Total: " + dailyTotal);
     }
 }
